@@ -1,4 +1,4 @@
-`timescale 1ns / 1ps
+`timescale 1ns / 100ps
 //////////////////////////////////////////////////////////////////////////////////
 // Company: 
 // Engineer: 
@@ -23,19 +23,24 @@
 
 module delayer_tb();
     
-localparam DELAY = 4;
-localparam N = 8;
 
-delayer #(.DELAY(DELAY), .N(N)) uut (.i_data(i_data), .o_data(o_data), .clk(clk), .ce(ce));
+delayer #(.DELAY(0), .N(8)) uut0 (.i_data(i_data), .o_data(o_data0), .clk(clk), .ce(ce));
+delayer #(.DELAY(1), .N(8)) uut1 (.i_data(i_data), .o_data(o_data1), .clk(clk), .ce(ce));
+delayer #(.DELAY(2), .N(8)) uut2 (.i_data(i_data), .o_data(o_data2), .clk(clk), .ce(ce));
+delayer #(.DELAY(3), .N(8)) uut3 (.i_data(i_data), .o_data(o_data3), .clk(clk), .ce(ce));
 
 reg clk = 1'b0;
-reg [N-1:0] i_data = 8'h55;
-wire [N-1:0] o_data;
-reg ce = 1'b1;
+reg [7:0] i_data = 8'h55;
+wire [7:0] o_data0;
+wire [7:0] o_data1;
+wire [7:0] o_data2;
+wire [7:0] o_data3;
+reg ce = 1'b0;
 
 initial begin
     $dumpfile("delayer_tb.vcd");
     $dumpvars;
+    #9 ce<=1'b1;
     #100 $finish;
 end
 

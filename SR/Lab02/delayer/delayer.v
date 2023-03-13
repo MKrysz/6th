@@ -25,9 +25,9 @@ module delayer#(
     parameter DELAY = 4
 )(
     input clk,
+    input ce,
     input [N-1:0] i_data,
-    output [N-1:0] o_data,
-    input ce
+    output [N-1:0] o_data
     );
 
 integer i;
@@ -40,10 +40,12 @@ end else begin
     reg [N-1:0] temp [DELAY:0];
     assign o_data = temp[DELAY];
     always @(posedge clk) begin
-       temp[0] <= i_data;
-       for(i = 1; i<DELAY; i = i+1) begin
-            temp[i] <= temp[i-1];
-       end
+        if(ce==1)begin
+            temp[0] <= i_data;
+            for(i = 0; i<DELAY; i = i+1) begin
+                    temp[i+1] <= temp[i];
+            end
+        end
     end
 end
 
